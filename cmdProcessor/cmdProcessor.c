@@ -74,7 +74,7 @@ void parseCommand () {
     uint8_t paramIndex = 0;
     uint8_t wordBeginningIndex = 0;
     bool firstWordParsed = false;
-    while (cmd[i] != BLANK_ARRAY_PLACEHOLDER) {   
+    while (cmd[wordBeginningIndex] != BLANK_ARRAY_PLACEHOLDER) {   
         if (cmd[i] == ' ' || cmd[i] == '\n' || cmd[i] =='\r') {
             cmd[i] = '\0';
             if (cmd[wordBeginningIndex] != '\0') { // This is used to ignore extra spaces/newline characters
@@ -92,6 +92,8 @@ void parseCommand () {
         }
         i++;
     }
+    
+    if (!firstWordParsed) cmdProcInput.state = CMD_PROC_ERROR;
 }
 
 command_t* getCommandPointerFromName (char* cmdName) {
@@ -132,16 +134,19 @@ command_t* getLastCommandHandle () {
 void printErrorMessages (uint8_t error) {
     if (cmdProcInput.state != CMD_PROC_ERROR) {
         cmdProcInput.state = CMD_PROC_ERROR;
-        switch(error) {
-            case ERROR_COMMAND_TOO_LONG:
-                printf("Max command size exceeded. Please modify \"cmdProcessor_config.h\" to allow for longer commands. Clearing command buffer.\n");
-                break;
-            case ERROR_TOO_MANY_PARAMS:
-                printf("Maximum number of parameters (%d) exceeded. Please modify \"cmdProcessor_config.h\" to allow for more parameters.\n", MAX_NUM_PARAMS);
-                break;
-            case ERROR_COMMAND_NOT_FOUND:
-                printf("Command not recognized. Type \"list\" for a list of commands and \"help\" to get usage help about about the command processor.\n");
-                break;
+        if (PRINT_ERROR_MESSAGES) {
+            switch(error) {
+                case ERROR_COMMAND_TOO_LONG:
+                    printf("Max command size exceeded. Please modify \"cmdProcessor_config.h\" to allow for longer commands. Clearing command buffer.");
+                    break;
+                case ERROR_TOO_MANY_PARAMS:
+                    printf("Maximum number of parameters (%d) exceeded. Please modify \"cmdProcessor_config.h\" to allow for more parameters.", MAX_NUM_PARAMS);
+                    break;
+                case ERROR_COMMAND_NOT_FOUND:
+                    printf("Command not recognized. Type \"list\" for a list of commands and \"help\" to get usage help about about the command processor.");
+                    break;
+            }
+            printf("\n");
         }
     }
 }

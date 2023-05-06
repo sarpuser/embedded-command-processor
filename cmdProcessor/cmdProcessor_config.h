@@ -10,7 +10,10 @@
 
 #define NO_PARAMS_INFO_STRING "This command does not take any parameters"
 
-#define CMD_PROC_PROMPT_STRING "> "
+#define CMD_PROC_PROMPT_STRING '>'
+#define PRINT_CMD_PROMPT_STRING true
+
+#define PRINT_ERROR_MESSAGES true
 
 #define CIRCULAR_BUFFER_SIZE 50
 #define MAX_COMMAND_SIZE 25

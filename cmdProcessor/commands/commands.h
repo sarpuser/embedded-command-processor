@@ -9,6 +9,7 @@
 #define	COMMANDS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include "../cmdProcessor.h"
 #include "../cmdProcessor_config.h"
